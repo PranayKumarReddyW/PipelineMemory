@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================================================== */
+/*  Global base styles                                                 */
+/* ================================================================== */
+
+:root {
+  --gauge-offset: 283;
+  color-scheme: dark;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #030712;
+  min-height: 100vh;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ================================================================== */
+/*  Component layer                                                    */
+/* ================================================================== */
+
+@layer components {
+  /* Glass card */
+  .glass-card {
+    @apply bg-gray-900/60 backdrop-blur-xl border border-gray-800/50
+           rounded-2xl shadow-lg shadow-black/20;
+  }
+
+  /* KPI card with subtle glow */
+  .kpi-card {
+    @apply glass-card p-5 relative overflow-hidden
+           transition-all duration-300 hover:border-gray-700/60
+           hover:shadow-xl hover:shadow-black/30;
+  }
+
+  .kpi-card::before {
+    content: '';
+    @apply absolute top-0 left-0 right-0 h-px
+           bg-gradient-to-r from-transparent via-pipeline-500/40 to-transparent;
+  }
+
+  /* Animated dot indicator */
+  .status-dot {
+    @apply w-2.5 h-2.5 rounded-full inline-block;
+  }
+
+  .status-dot-success {
+    @apply bg-emerald-400 shadow-lg shadow-emerald-500/30;
+  }
+
+  .status-dot-failed {
+    @apply bg-red-400 shadow-lg shadow-red-500/30;
+  }
+
+  .status-dot-rolled_back {
+    @apply bg-amber-400 shadow-lg shadow-amber-500/30;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full
+           text-xs font-medium tracking-wide;
+  }
+
+  .badge-success {
+    @apply bg-emerald-500/15 text-emerald-400 border border-emerald-500/20;
+  }
+
+  .badge-failed {
+    @apply bg-red-500/15 text-red-400 border border-red-500/20;
+  }
+
+  .badge-rolled_back {
+    @apply bg-amber-500/15 text-amber-400 border border-amber-500/20;
+  }
+
+  .badge-low {
+    @apply bg-emerald-500/15 text-emerald-400 border border-emerald-500/20;
+  }
+
+  .badge-medium, .badge-med {
+    @apply bg-amber-500/15 text-amber-400 border border-amber-500/20;
+  }
+
+  .badge-high {
+    @apply bg-orange-500/15 text-orange-400 border border-orange-500/20;
+  }
+
+  .badge-critical {
+    @apply bg-red-500/15 text-red-300 border border-red-500/20;
+  }
+
+  /* Sidebar nav item */
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium
+           text-gray-400 transition-all duration-200
+           hover:bg-gray-800/60 hover:text-gray-200;
+  }
+
+  .nav-item-active {
+    @apply bg-pipeline-600/15 text-pipeline-400 border border-pipeline-500/20
+           shadow-sm shadow-pipeline-500/10;
+  }
+
+  /* Input styling */
+  .form-input {
+    @apply w-full bg-gray-800/60 border border-gray-700/50 rounded-xl
+           px-4 py-2.5 text-sm text-gray-200 placeholder-gray-500
+           focus:outline-none focus:ring-2 focus:ring-pipeline-500/40 focus:border-pipeline-500/50
+           transition-all duration-200;
+  }
+
+  .form-select {
+    @apply form-input appearance-none cursor-pointer;
+  }
+
+  .form-label {
+    @apply block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1.5;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           bg-pipeline-600 hover:bg-pipeline-500 text-white text-sm font-semibold
+           rounded-xl shadow-lg shadow-pipeline-600/25
+           transition-all duration-200 active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           text-gray-400 hover:text-gray-200 hover:bg-gray-800/60
+           text-sm font-medium rounded-xl transition-all duration-200;
+  }
+}
+
+/* ================================================================== */
+/*  Animations                                                         */
+/* ================================================================== */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  @apply bg-gray-800 rounded-lg;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Risk gauge animation */
+.gauge-circle {
+  transition: stroke-dashoffset 1.2s ease-out;
+}
+
+/* Fade-in for page transitions */
+.page-enter {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Markdown rendering in chat */
+.prose-invert h2 {
+  @apply text-lg font-semibold text-gray-100 mt-4 mb-2;
+}
+
+.prose-invert h3 {
+  @apply text-base font-semibold text-gray-200 mt-3 mb-1.5;
+}
+
+.prose-invert ul {
+  @apply list-disc list-inside space-y-1 text-gray-300;
+}
+
+.prose-invert table {
+  @apply w-full text-sm text-gray-300 mt-2;
+}
+
+.prose-invert th {
+  @apply text-left font-medium text-gray-400 border-b border-gray-700 pb-1 pr-4;
+}
+
+.prose-invert td {
+  @apply py-1 pr-4 border-b border-gray-800/50;
+}
+
+.prose-invert strong {
+  @apply text-gray-100 font-semibold;
+}
+
+.prose-invert em {
+  @apply text-gray-400 italic;
+}
+
+.prose-invert code {
+  @apply text-pipeline-400 bg-gray-800/60 px-1.5 py-0.5 rounded text-xs font-mono;
+}
+
+.prose-invert p {
+  @apply text-gray-300 leading-relaxed mb-2;
+}
